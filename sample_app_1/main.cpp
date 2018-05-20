@@ -1,5 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "datastore.h"
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +10,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    QQmlContext* context = engine.rootContext();
+    datastore ds;
+    context->setContextProperty("dataStore", &ds);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
