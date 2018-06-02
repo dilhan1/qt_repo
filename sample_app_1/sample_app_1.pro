@@ -1,4 +1,4 @@
-QT += quick
+QT += quick concurrent
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -13,7 +13,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    datastore.cpp
+    datastore.cpp \
+    librosco/protocol.c \
+    librosco/setup.c \
+    memsinterface.cpp \
+    memsdata.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,4 +33,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    datastore.h
+    datastore.h \
+    librosco/rosco.h \
+    librosco/rosco_internal.h \
+    librosco/rosco_version.h \
+    memsinterface.h \
+    librosco/commonunits.h \
+    memsdata.h

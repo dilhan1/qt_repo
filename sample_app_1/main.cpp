@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "datastore.h"
+#include "memsdata.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,9 @@ int main(int argc, char *argv[])
     QQmlContext* context = engine.rootContext();
     datastore ds;
     context->setContextProperty("dataStore", &ds);
+
+    MemsData data;
+    context->setContextProperty("memsData", &data);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())

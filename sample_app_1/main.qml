@@ -12,19 +12,44 @@ Window {
 
     Connections{
         target: dataStore
-        onIncreaseOne:btn_new.text = ms
+        onIncreaseOne:{
+            btn_new.text = ms
+        }
     }
 
-    Button{
-        x: parent.width - width
-        id: btn_new
-        text: "Hit"
-        onClicked: dataStore.callMeFromQML()
+    Connections{
+        target: dataStore
+        onDataReceive:{
+            engine_speed_value.text = md.getEngine_rpm()
+            engine_speed_progress_bar.value = md.getEngine_rpm_progress()
+            engine_speed_value.color = md.getEngine_rpm_color()
+            map_sensor_value.text = md.getMap_kpa()
+
+            engine_temp_value.text = md.getCoolant_temp_f()
+            engine_temp_value.color = md.getCoolant_temp_f_color()
+
+            air_temp_value.text = md.getIntake_air_temp_f()
+            air_temp_value.color = md.getIntake_air_temp_f_color()
+
+            throttle_position_value.text = md.getThrottle_pot_voltage()
+
+            main_voltage_value.text = md.getBattery_voltage()
+            main_voltage_value.color = md.getBattery_voltage_color()
+
+            ecu_id.text = md.getEcuIdLabel()
+        }
     }
+
+   // Button{
+   //     x: parent.width - width
+   //     id: btn_new
+   //     text: "Hit"
+   //     onClicked: dataStore.callMeFromQML()
+   // }
 
     Text{
         id: ecu_id
-        text: "ECU ID: MNE101070"
+        text: "ECU ID: XX XX XX XX"
         font.pointSize: 14
         color: "#e4e4e4"
         x: 10
@@ -65,25 +90,37 @@ Window {
             id: engine_speed_value
             text: "1850"
             font.pointSize: 30
-            color: "#8fc564"
+
             anchors.centerIn: engine_speed_gauge
         }
 
         ProgressBar {
-            value: 0.5
-            style: ProgressBarStyle {
-                    background: Rectangle {
-                        color: "#454545"
-                        implicitWidth: engine_speed_gauge.width - 4
-                        implicitHeight: 4
-                        //border.color: "black"
+            id: engine_speed_progress_bar
+            value: 0.0
+            x: 1
 
-                    }
-                    progress: Rectangle {
-                        color: "#3ba9ea"
-                        //border.color: "black"
-                    }
+            style: ProgressBarStyle {
+                background: Rectangle {
+                    color: "#454545"
+                    implicitWidth: engine_speed_gauge.width - 2
+                    implicitHeight: 4
                 }
+
+                progress: Rectangle {
+                    property string colorA: "#3ba9ea"
+                    property string colorB: "#8fc564"
+                    property string colorC: "#eca245"
+                    color: {
+                        if (engine_speed_progress_bar.value >= 0.0 && engine_speed_progress_bar.value < 0.2)
+                            colorA
+                        else if (engine_speed_progress_bar.value >= 0.2 && engine_speed_progress_bar.value < 0.6)
+                            colorB
+                        else
+                            colorC
+                    }
+
+                }
+             }
         }
     }
 
@@ -173,8 +210,16 @@ Window {
         y: 30
 
         Text{
+            id: mini_logo_value
+            text: "D"
+            font.pointSize: 42
+            color: "#e3524f"
+            anchors.centerIn: mini_logo
+        }
+
+        Text{
             id: mini_logo_header
-            text: "Mini Logo"
+            text: "Gear"
             font.pointSize: 14
             color: "#e4e4e4"
             x: parent.width / 2 - width / 2
@@ -183,7 +228,7 @@ Window {
 
         Text{
             id: mini_logo_footer
-            text: "mini_footer"
+            text: "P R N D 1 2 3"
             font.pointSize: 14
             color: "#e4e4e4"
             x: parent.width / 2 - width / 2
